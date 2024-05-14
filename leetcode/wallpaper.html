@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/prismjs@1.16.0/themes/prism.css">
+<script src="https://unpkg.com/prismjs@1.16.0/prism.js"></script>
+<script src="https://unpkg.com/prismjs@1.16.0/components/prism-c.min.js"></script>
+<script src="https://unpkg.com/prismjs@1.16.0/components/prism-cpp.min.js"></script>
+
+<script>
+    window.onload = function() {
+        for (o of document.getElementsByClassName("code")) {
+            code = o.innerText;
+            lang = 'cpp';
+            o.innerHTML = Prism.highlight(code, Prism.languages[lang], lang)
+        }
+    }
+    //marked.setOptions({ highlight: function (code, lang) { return lang=='cpp' ? Prism.highlight(code, Prism.languages[lang], lang) : code; }});
+</script>
+
+
+
+<style>
+.code {
+    font-family: monospace;
+    white-space: pre;
+    border: 1px solid black;
+    float: left;
+/*
+    //display: inline-block;
+    //float: left;
+
+    display: flex;
+    //flex-wrap: wrap;
+    //align-content: flex-end; //put the appropriate value to position your children divs
+*/
+}
+</style>
+
+<div class="code">
+int height(treeNode *root) {
+    if (!root)
+        return 0;
+    return 1 + max(height(root->left), height(root->right));
+}
+
+int diameter(treeNode *root) {
+    if (!root)
+        return 0;
+    int root_d = 1 + height(root->left) + height(root->right);
+    int left_d = diameter(root->left);
+    int right_d = diameter(root->right);
+    return max(root_d, max(left_d, right_d));
+}
+</div>
+
+
+<div class="code">
+ListNode* reverseList(ListNode* A) {
+    if (!A->next) return A;
+    ListNode * tail = reverseList(A->next);
+    A->next->next = A;
+    A->next = NULL;
+    return tail;
+}
+</div>
+
+<div class="code">
+ListNode* reverseList(ListNode* A) {
+    ListNode *prev = 0, *next, *curr = A;
+    while (curr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+</div>
+
+<div class="code">
+int partition(int a[], int p, int q) { // lomuto
+    //swap(&a[p + (rand() % (q - p + 1))], &a[q]);
+    int i = p - 1; // pivot = a[q]
+    for (int j = p; j &lt;= q; j++)
+        if (a[j] &lt;= a[q])
+            swap(a[++i], a[j]);
+    return i;
+}
+</div>
+
+<div class="code">
+void quicksort(int a[], int p, int q) {
+    if (p &lt; q) {
+        int pivotIdx = partition(a, p, q);
+        quicksort(a, p, pivotIdx - 1);
+        quicksort(a, pivotIdx + 1, q);
+    }
+}
+</div>
+
+<div class="code">
+int quickselect(vector&lt;int&gt; A, int left, int right, int k) {
+     if (left == right)
+         return A[left];    
+    int pivotIndex = partition(A, left, right);
+    if (k == pivotIndex)
+         return A[k];    
+    else if (k &lt; pivotIndex)
+        return quickselect(A, left, pivotIndex - 1, k);
+    else
+        return quickselect(A, pivotIndex + 1, right, k);
+}
+</div>
+
+<div class="code">
+int partition(int a[], int lo, int hi) {
+    int pivot = a[lo + (hi - lo) / 2];
+    int i = lo - 1; // hoare scheme
+    int j = hi + 1;
+    while (true) {
+        do {
+            i = i + 1;
+        } while (a[i] &lt; pivot);
+
+        do {
+            j = j - 1;
+        } while (a[j] &gt; pivot);
+
+        if (i &gt;= j)
+            return j;
+
+        swap(A[i], A[j]);
+    }
+}
+</div>
+
+<div class="code">
+void bubble_sort(int a[], int n) {
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 0; i &lt; n - 1; i++)
+            if (a[i] &gt; a[i + 1]) {
+                swap(a[i], a[i + 1]);
+                swapped = true;
+            }
+    }
+}
+</div>
+
+<div class="code">
+void optimized_bubble_sort(int a[], int n) {
+    int j = 0;
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        j++;
+        for (int i = 0; i &lt; n - j; i++)
+            if (a[i] &gt; a[i + 1]) {
+                swap(a[i], a[i + 1]);
+                swapped = true;
+            }
+    }
+}
+</div>
+
+<div class="code">
+void merge(int a[], int l, int m, int r) {
+    int *tmp = new int[r - l + 1];
+    int k = 0, i = l, j = m + 1;
+    while (i &lt;= m && j &lt;= r)
+        tmp[k++] = a[i] &gt; a[j] ? a[j++] : a[i++];
+    while (i &lt;= m) tmp[k++] = a[i++];
+    while (j &lt;= r) tmp[k++] = a[j++];
+    for (int i = 0; i &lt; r - l + 1; i++)
+        a[i + l] = tmp[i];
+    delete[] tmp;
+}
+
+void merge_sort(int a[], int l, int r) {
+    if (l &gt;= r)
+        return;
+    int m = (l + r) / 2;
+    merge_sort(a, l, m);
+    merge_sort(a, m + 1, r);
+    merge(a, l, m, r);
+}
+</div>
+
+<div class="code">
+// selection sort, both O(n^2)
+void selection_sort(int *a, int n) {
+    for (int i = 0; i &lt; n - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (a[j] &lt; a[min])
+                min = j;
+        }
+        swap(a[i], a[min]);
+    }
+}
+</div>
+
+<div class="code">
+// insertion sort, best O(n), worst O(n^2)
+void insertion_sort(int *a, int n) {
+    for(int i = 0; i &lt; n; i++) {
+        int j = i;
+        while (j&gt;0 && a[j-1]&gt;a[j]) {
+            swap(a[j-1], a[j]);
+            j = j - 1;
+        }
+    }
+}
+</div>
+
+<div class="code">
+// classic kadane
+int maxSubArray(char * a, int n) {
+    int max_so_far = 0, max_ending_here = 0;
+    for (int i = 0; i &lt; n; i++) {
+        max_ending_here = max_ending_here + a[i];
+        if (max_ending_here &lt; 0)
+            max_ending_here = 0;
+        if (max_so_far &lt; max_ending_here)
+            max_so_far = max_ending_here;
+    }
+    return max_so_far;
+}
+</div>
+
+<div class="code">
+// unversal (all negative) kadane
+int maxSubArray(char * a, int n) {
+    int maxSum = a[0], currentSum = a[0];
+    for (int i = 1; i &lt; n; i++) {
+        currentSum = max(a[i], currentSum + a[i]);
+        maxSum = max(maxSum, currentSum);
+    }
+    return maxSum;
+}
+</div>
+
+<div class="code">
+int main() { //std permutations
+    vector&lt;int&gt; v = { 1, 2, 3 };
+    do { for (auto x:v) cout &lt;&lt; x &lt;&lt; " "; cout &lt;&lt; endl;
+    } while (next_permutation(v.begin(), v.end()));
+}
+</div>
+
+<div class="code">
+// permutations, heap's scheme
+void permute_r(vector&lt;vector&lt;int&gt;&gt;& res, 
+    vector&lt;int&gt;& num, int len, int ofs) {
+    if(ofs == len - 1)
+        res.push_back(num);
+    for(int i = ofs; i &lt; len; i++) {
+        swap(num[i], num[ofs]);
+        permute_r(res, num, len, ofs + 1);
+        swap(num[i], num[ofs]);
+    }
+}
+vector&lt;vector&lt;int&gt;&gt; permute(vector&lt;int&gt;& nums) {
+    vector&lt;vector&lt;int&gt;&gt; result;
+    permute_r(result, nums, nums.size(), 0);
+    return result;
+}
+</div>
+
+<div class="code">
+// binary search
+int binarySearch(int * a, int n, int x) {
+    int l = 0;
+    int r = n - 1;
+    while (l &lt;= r) {
+        int m = ( l + r ) / 2;
+        if (a[m] == x)
+            return m;
+        if (a[m] &lt; x)
+            l = m + 1;
+        else
+            r = m - 1;
+    }
+    return -1;
+}
+
+int lower_bound(int * a, int n, int x) {
+    int l = 0;
+    int r = n; // not n - 1;
+    while(l &lt; r) {
+        int m = (l + r) / 2;
+        if (a[m] &lt; x) // less
+            l = m + 1;
+        else
+            r = m;
+    }
+    return l;
+}
+
+int upper_bound(int * a, int n, int x) {
+    int l = 0;
+    int r = n; // not n - 1;
+    while(l &lt; r) {
+        int m = (l + r) / 2;
+        if (a[m] &lt;= x) // less or equal
+            l = m + 1;
+        else
+            r = m;
+    }
+    return l;
+}
+</div>
+
+<div class="code">
+node * make_bst(int * data, int l, int r) {
+    if (l &gt; r) return 0;
+    int m = (l + r)/2;
+    node * root = new node(data[m]);
+    root-&gt;left = make_bst(data, l, m-1);
+    root-&gt;right = make_bst(data, m+1, r);
+    return root;
+}
+</div>
+
+<div class="code">
+node * mirror(node * root) {
+    if (!root) return 0;
+    node * left = mirror(root-&gt;left);
+    node * right = mirror(root-&gt;right);
+    root-&gt;left = right;
+    root-&gt;right = left;
+    return root;
+}
+</div>
+
+<div class="code">
+// check bst
+bool isValidBST(node *root, node *l=0, node *r=0) {
+    if (!root) return true;
+    if (l && l-&gt;val &gt;= root-&gt;val) return false;
+    if (r && r-&gt;val &lt;= root-&gt;val) return false;
+    return isValidBST(root-&gt;left, l, root) 
+        && isValidBST(root-&gt;right, root, r);
+}
+</div>
+
+<div class="code">
+// check bst
+bool bst(node * root, int min = INT_MIN, int max = INT_MAX) {
+    if (!root) return true;
+    if (root-&gt;data &lt; min || root-&gt;data &gt; max) return false;
+    return bst(root-&gt;left, min, root-&gt;val) 
+        && bst(root-&gt;right, root-&gt;val, max);
+}
+</div>
+
+<div class="code">
+bool is_bst(treeNode* root, treeNode *&prev) {
+    if (!root) return true;
+    if (!is_bst(root->left, prev)) return false;
+    if (prev && root->value <= prev->value) return false;
+    prev = root;
+    if (!is_bst(root->right, prev)) return false;
+    return true;
+}
+</div>
+
+<div class="code">
+// check depth
+int depth(node * root) {
+    if (!root) return 0;
+    return 1 + max(depth(root-&gt;left),
+        depth(root-&gt;right));
+}
+</div>
+
+<div class="code">
+// check perfect
+bool perfect(node * root) {
+    if (!root) return true;
+    return (depth(root-&gt;left)==depth(root-&gt;right) 
+    && perfect(root-&gt;left) && perfect(root-&gt;right));
+}
+</div>
+
+<div class="code">
+// check balanced
+int height(struct TreeNode* root) {
+    if (!root) return 0;
+    int l = height(root->left);
+    int r = height(root->right);
+    if (l==-1 || r==-1 || fabs(l-r)>1) return -1;
+    return 1 + fmax(l, r);
+}
+
+bool isBalanced(struct TreeNode* root) {
+    return height(root)!=-1;
+}
+</div>
+
+<div class="code">
+class Solution(object):
+    def isBalanced(self, root):
+        def height(root): return 1 + max(height(root.left), height(root.right)) if root else 0
+        return abs(height(root.left)-height(root.right))&lt;2 and self.isBalanced(root.left) and self.isBalanced(root.right) if root else True
+</div>
+
+<div class="code">
+// check complete
+int nodes(node* root) {
+    if (!root) return 0;
+    return 1 + nodes(root-&gt;left) + nodes(root-&gt;right);
+}
+
+bool complete(node* root, int n=-1, int d=0){
+    if (n==-1) n = nodes(root);
+    if (!root) return true;
+    if (d&gt;=n) return false;
+    return complete(root-&gt;left, n, 2*d+1) 
+        && complete(root-&gt;right, n, 2*d+2);
+}
+</div>
+
+<div class="code">
+// lowest common ancestor
+node * lca(node *root, node *p, node *q) {
+    if (!root || root == p || root == q)
+        return root;
+    node *left = lca(root-&gt;left, p, q);
+    node *right = lca(root-&gt;right, p, q);
+    if (!left) return right;
+    else if (!right) return left;
+    return root;
+}
+</div>
+
+<div class="code">
+// level order (bfs)
+void level_order(node *root) {
+    queue&lt;node *&gt; q;
+    if (root) q.push(root);
+    int level = 0;
+    while (!q.empty()) {
+        int nodes = q.size();
+        while (nodes--) { // dequeue level
+            node *x = q.front();
+            q.pop();
+            if (x-&gt;left) q.push(x-&gt;left);
+            if (x-&gt;right) q.push(x-&gt;right);
+            cout &lt;&lt; x-&gt;val &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+    }
+}
+</div>
+
+<div class="code">
+void morris_preorder(node * root) {
+  while (root) {
+    if (!root-&gt;left) {
+      //cout &lt;&lt; root-&gt;val;
+      root = root-&gt;right;
+    } else {
+      node * curr = root-&gt;left;
+      while (curr-&gt;right && curr-&gt;right != root)
+        curr = curr-&gt;right;
+      if (curr-&gt;right == root) {
+        curr-&gt;right = NULL;
+        root = root-&gt;right;
+      } else {
+        //cout &lt;&lt; root-&gt;val;
+        curr-&gt;right = root;
+        root = root-&gt;left;
+      }
+    }
+  }
+}
+</div>
+
+<div class="code">
+// next right pointers
+void connect(Node* root, Node * next = 0) {
+    if (!root) return;
+    root-&gt;next = next;
+    connect(root-&gt;left, root-&gt;right);
+    connect(root-&gt;right, next ? next-&gt;left : 0);
+}
+</div>
+
+<div class="code">
+ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
+    ListNode dummyHead(0);
+    ListNode * p = &dummyHead;
+    while (l1 && l2) {
+        if (l1->val < l2->val)
+            p->next = l1, l1=l1->next;
+        else
+            p->next = l2, l2=l2->next;
+        p = p->next;
+    }
+    if (l1) p->next = l1;
+    if (l2) p->next = l2;
+    return dummyHead.next;
+}
+</div>
+<div class="code">
+void reverse_array(unsigned char *a, long long unsigned int n) {
+    unsigned char *b = a+n-1;
+    while (a&lt;b) {
+        unsigned char tmp = *a;
+        *a++ = reverse_table[*b];
+        *b-- = reverse_table[tmp];
+    }
+    if (n & 1) *a = reverse_table[*a];
+}
+</div>
+
+<div class="code">
+listNode * flatten(listNode * head) {
+    listNode * curr = head, * tail, * next;
+    while (curr) {
+        if (curr->down) {
+            next = curr->next;
+            tail = flatten(curr->down);
+            curr->next = tail;
+            curr->down = 0;
+            while (curr->next) curr = curr->next;
+            curr->next = next;
+        }
+        curr = curr->next;
+    }
+    return head;
+}
+</div>
+
+<div class="code">
+int coinChange(vector<int>& coins, int amount) {
+    int max = amount + 1;
+    vector<int> dp(amount+1, max);
+    dp[0] = 0;   
+    for (int i = 1; i <= amount; i++) {
+        for (int j = 0; j < coins.size(); j++) {
+            if (coins[j] <= i) {
+                dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+</div>
+<div class="code">
+int minDistance(string a, string b) {
+    int m = a.length();
+    int n = b.length();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 1));
+    for (int i = 0; i < m+1; i++) dp[i][0] = i;
+    for (int j = 0; j < n+1; j++) dp[0][j] = j;
+    for (int i = 1; i < m+1; i++)
+        for (int j = 1; j < n+1; j++)
+            dp[i][j] = a[i-1]==b[j-1] ? dp[i-1][j-1]
+                : 1 + min(dp[i-1][j-1], min(dp[i-1][j], dp[i][j-1]));
+    return dp[m][n];
+}
+</div>
+
+<div class="code">
+int knapsack(int W, vector<int> wt, vector<int> val, int n) {
+    vector<vector<int>> dp(n+1, vector<int>(W+1, 0));
+    for (int i=1; i&lt;n+1; i++) {
+        for (int w=1; w&lt;W+1; w++) {
+            if (i==0 or w==0) dp[i][w] = 0;
+            dp[i][w] = wt[i-1] > w ? dp[i-1][w]
+                : max(val[i-1] + dp[i-1][w-wt[i-1]], dp[i-1][w]);
+        }
+    }
+    return dp[n][W];
+}
+</div>
+
+<div class="code">
+#knight dialer
+def count_sequences(start_position, num_hops):
+    if num_hops == 0: return 1
+    num_sequences = 0
+    for position in neighbors(start_position):
+        num_sequences += count_sequences(position, num_hops - 1)
+    return num_sequences
+
+def count_sequences_dp(start_position, num_hops):
+    prior_case = [1] * 10
+    current_case = [0] * 10
+    current_num_hops = 1
+    while current_num_hops <= num_hops:
+        current_case = [0] * 10
+        current_num_hops += 1
+        for position in range(0, 10):
+            for neighbor in neighbors(position):
+                current_case[position] += prior_case[neighbor]
+        prior_case = current_case
+    return current_case[start_position]
+print(count_sequences_dp(6, 2))
+//cpp
+vector&lt;vector&lt;int>> neighbors = {
+    {4,6}, {6,8}, {7,9}, {4,8}, {3,9,0},
+    {}, {1,7,0}, {2,6}, {1,3}, {2,4}
+};
+map<pair&lt;int,int>, int> cache;
+int count_sequences(int position, int num_hops) {
+    pair<int,int> p = make_pair(position, num_hops);
+    if (cache.count(p)) return cache[p];
+    if (num_hops==0) return 1;
+    int num_seq = 0;
+    for (int pos : neighbors[position])
+        num_seq += count_sequences(pos, num_hops-1);
+    cache[make_pair(position, num_hops)] = num_seq;
+    return num_seq;
+}
+</div>
+
+<div class="code">
+void hanoi(int q, int a, int b, int c){
+    if (!q) return;
+    hanoi(q-1, a, c, b);
+    // (cout move, a to c)
+    hanoi(q-1, b, a, c);
+}
+</div>
+
+<div class="code">
+# use checkvalid before placing the next queen
+# placeQueens is recursive
+GRID_SIZE = 8
+def checkValid(columns, row1, column1):
+    for row2 in range(0,row1-1):
+        column2 = columns[row2]
+        if column1 == column2: return False
+        columnDistance = abs(column2 - column1)
+        rowDistance = row1 - row2
+        if columnDistance == rowDistance: return False
+    return True
+# the actual algorithm
+def placeQueens(row,columns,results):
+    if (row==GRID_SIZE):
+        results.append(columns)
+    else:
+        for col in range(GRID_SIZE):
+            if checkValid(columns, row, col):
+                columns[row]=col
+                placeQueens(row + 1, columns, results)
+res = []
+placeQueens(0,[0]*8, res)
+print res[0]
+</div>
+
+<div class="code">
+int boyer_moore(int *a, int n) {
+    int x = -1, c = 0;
+    for (int i = 0; i < n; i++) if (c == 0) x = a[i], c++; else c += x == a[i] ? 1 : -1;
+    return x;
+}
+</div>
+
+<div class="code">
+void misra_gries(int *a, int n, int &x1, int &x2) {
+    int c1 = 0, c2 = 0;
+    x1 = -1;
+    x2 = -1;
+    for (int i = 0; i < n; i++) {
+        int x = a[i];
+        if (x1 == x) c1++; else
+        if (x2 == x) c2++; else
+        if (c1 == 0) c1++, x1 = x; else
+        if (c2 == 0) c2++, x2 = x; else
+        c1--, c2--;
+
+    }
+}
+</div>
+
+<div class="code">
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.items = dict()
+
+    def get(self, key):
+        if key in self.items:
+            item = self.items[key]
+            del self.items[key]
+            self.items[key] = item
+            return item
+        else:
+            return -1
+
+    def put(self, key, value):
+        if key in self.items:
+            del self.items[key]
+        if len(self.items) == self.capacity:
+            k = next(iter(self.items.keys()))
+            del self.items[k]
+        self.items[key] = value
+</div>
+
+<div class="code">
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.dic = collections.OrderedDict()
+                
+    def get(self, key):
+        if key not in self.dic:
+            return -1
+        val = self.dic[key]
+        self.dic.move_to_end(key)
+        return val
+                
+    def put(self, key, value):
+        self.dic[key] = value
+        self.dic.move_to_end(key)
+        if len(self.dic) > self.capacity:
+            self.dic.popitem(last=False)
+</div>
+
+<div class="code">
+class LRUCache {
+public:
+    LRUCache(int capacity) : _capacity(capacity) {}
+
+    int get(int key) {
+        auto it = cache.find(key);
+        if (it == cache.end())
+            return -1;
+        touch(it);
+        return it->second.first;
+    }
+
+    void put(int key, int value) {
+        auto it = cache.find(key);
+        if (it != cache.end())
+            touch(it);
+        else {
+            if (cache.size() == _capacity) {
+                cache.erase(used.back());
+                used.pop_back();
+            }
+            used.push_front(key);
+        }
+        cache[key] = { value, used.begin() };
+    }
+
+private:
+    typedef list&lt;int&gt; list_t;
+    typedef pair&lt;int, list_t::iterator&gt; pair_t;
+    typedef unordered_map&lt;int, pair_t&gt; cache_t;
+
+    void touch(cache_t::iterator it) {
+        int key = it->first;
+        used.erase(it->second.second);
+        used.push_front(key);
+        it->second.second = used.begin();
+    }
+
+    cache_t cache;
+    list_t used;
+    int _capacity;
+}
+</div>
+
+</body>
+</html>
